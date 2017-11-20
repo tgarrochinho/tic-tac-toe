@@ -22,56 +22,57 @@
 
 (deftest test-board-picker
   (testing "Board picker"
-    (is (= (board-picker [1 2 3 4 5 6 7 8 9] 1 \X) [\X 2 3 4 5 6 7 8 9]))
-    (is (= (board-picker [\X 2 3 4 5 6 7 8 9] 2 \O) [\X \O 3 4 5 6 7 8 9]))
-    (is (= (board-picker [1 2 3 4 5 6 7 8 9] 4 \X) [1 2 3 \X 5 6 7 8 9]))
-    (is (= (board-picker [1 2 3 \X 5 6 7 8 9] 5 \O) [1 2 3 \X \O 6 7 8 9]))
-    (is (= (board-picker [1 2 \O \X \O \X 7 8 9] 9 \X) [1 2 \O \X \O \X 7 8 \X]))))
+    (is (= (board-pick [1 2 3 4 5 6 7 8 9] 1 "X") ["X" 2 3 4 5 6 7 8 9]))
+    (is (= (board-pick ["X" 2 3 4 5 6 7 8 9] 2 "O") ["X" "O" 3 4 5 6 7 8 9]))
+    (is (= (board-pick [1 2 3 4 5 6 7 8 9] 4 "X") [1 2 3 "X" 5 6 7 8 9]))
+    (is (= (board-pick [1 2 3 "X" 5 6 7 8 9] 5 "O") [1 2 3 "X" "O" 6 7 8 9]))
+    (is (= (board-pick [1 2 "O" "X" "O" "X" 7 8 9] 9 "X") [1 2 "O" "X" "O" "X" 7 8 "X"]))))
 
 (deftest test-valid-pick?
   (testing "Valid pick?"
     (is (= (valid-pick? [1 2 3 4 5 6 7 8 9] 1) true))
-    (is (= (valid-pick? [\X 2 3 4 5 6 7 8 9] 2) true))
-    (is (= (valid-pick? [\X \O 3 4 5 6 7 8 9] 3) true))
-    (is (= (valid-pick? [1 2 3 \X \O 6 7 8 9] 1) true))
-    (is (= (valid-pick? [1 2 3 \X \O 6 7 8 9] 4) false))
-    (is (= (valid-pick? [1 2 3 \X \O 6 7 8 9] 5) false))))
+    (is (= (valid-pick? ["X" 2 3 4 5 6 7 8 9] 2) true))
+    (is (= (valid-pick? ["X" "O" 3 4 5 6 7 8 9] 3) true))
+    (is (= (valid-pick? [1 2 3 "X" "O" 6 7 8 9] 1) true))
+    (is (= (valid-pick? [1 2 3 "X" "O" 6 7 8 9] 4) false))
+    (is (= (valid-pick? [1 2 3 "X" "O" 6 7 8 9] 5) false))
+    (is (= (valid-pick? [1 2 3 "X" "O" 6 7 8 9] 10) false))))
 
 (deftest test-board-full?
   (testing "Board full?"
-    (is (= (board-full? [\X \X \X \O \O 7 8 9]) false))
-    (is (= (board-full? [1 \O \O \X \X \X 7 8 9]) false))
-    (is (= (board-full? [1 \O \O 4 5 6 \X \X \X]) false))
-    (is (= (board-full? [\X \O \O \O \X \O \X \X \X]) true))
-    (is (= (board-full? [\X \X 3 \O 5 6 7 8 9]) false))
-    (is (= (board-full? [1 2 3 \X \X 6 \O 8 9]) false))
-    (is (= (board-full? [1 2 \O 4 5 6 7 \X \X]) false))
-    (is (= (board-full? [\X \O \X \O \X \X \O \X \O]) true))
-    (is (= (board-full? [\X \X \X \O \O \X \O \X \O]) true))
-    (is (= (board-full? [\O \O \O \X \X \O \X \O \X]) true))
-    (is (= (board-full? [\X \X \X \X \O \O \O 10 11 12 13 14 15 16]) false))
-    (is (= (board-full? [\X \O \O \O \O \O \X \X \O \X \O \X \O \X \O \X]) true))))
+    (is (= (board-full? ["X" "X" "X" "O" "O" 7 8 9]) false))
+    (is (= (board-full? [1 "O" "O" "X" "X" "X" 7 8 9]) false))
+    (is (= (board-full? [1 "O" "O" 4 5 6 "X" "X" "X"]) false))
+    (is (= (board-full? ["X" "O" "O" "O" "X" "O" "X" "X" "X"]) true))
+    (is (= (board-full? ["X" "X" 3 "O" 5 6 7 8 9]) false))
+    (is (= (board-full? [1 2 3 "X" "X" 6 "O" 8 9]) false))
+    (is (= (board-full? [1 2 "O" 4 5 6 7 "X" "X"]) false))
+    (is (= (board-full? ["X" "O" "X" "O" "X" "X" "O" "X" "O"]) true))
+    (is (= (board-full? ["X" "X" "X" "O" "O" "X" "O" "X" "O"]) true))
+    (is (= (board-full? ["O" "O" "O" "X" "X" "O" "X" "O" "X"]) true))
+    (is (= (board-full? ["X" "X" "X" "X" "O" "O" "O" 10 11 12 13 14 15 16]) false))
+    (is (= (board-full? ["X" "O" "O" "O" "O" "O" "X" "X" "O" "X" "O" "X" "O" "X" "O" "X"]) true))))
 
 (deftest test-winner?
   (testing "Winner?"
     (testing "Lines"
-      (is (= (winner? [\X \X \X \O \O 6 7 8 9]) true))
-      (is (= (winner? [1 \O \O \X \X \X 7 8 9]) true))
-      (is (= (winner? [1 \O \O 4 5 6 \X \X \X]) true))
-      (is (= (winner? [\X \O \O \O \X \O \X \X \X]) true))
-      (is (= (winner? [\X \X 3 \O 5 6 7 8 9]) false))
-      (is (= (winner? [1 2 3 \X \X 6 \O 8 9]) false))
-      (is (= (winner? [1 2 \O 4 5 6 7 \X \X]) false))
-      (is (= (winner? [\X \O \X \O \X \X \O \X \O]) false))
-      (is (= (winner? [\X \X \X \O \O \X \O \X \O]) true))
-      (is (= (winner? [\O \O \O \X \X \O \X \O \X]) true))
-      (is (= (winner? [\X \X \X \X \O \O \O 8 9 10 11 12 13 14 15 16]) true))
-      (is (= (winner? [\X \O \O \O \O \O \X \X \O \X \O \X \O \X \O \X]) false)))
+      (is (= (winner? ["X" "X" "X" "O" "O" 6 7 8 9]) true))
+      (is (= (winner? [1 "O" "O" "X" "X" "X" 7 8 9]) true))
+      (is (= (winner? [1 "O" "O" 4 5 6 "X" "X" "X"]) true))
+      (is (= (winner? ["X" "O" "O" "O" "X" "O" "X" "X" "X"]) true))
+      (is (= (winner? ["X" "X" 3 "O" 5 6 7 8 9]) false))
+      (is (= (winner? [1 2 3 "X" "X" 6 "O" 8 9]) false))
+      (is (= (winner? [1 2 "O" 4 5 6 7 "X" "X"]) false))
+      (is (= (winner? ["X" "O" "X" "O" "X" "X" "O" "X" "O"]) false))
+      (is (= (winner? ["X" "X" "X" "O" "O" "X" "O" "X" "O"]) true))
+      (is (= (winner? ["O" "O" "O" "X" "X" "O" "X" "O" "X"]) true))
+      (is (= (winner? ["X" "X" "X" "X" "O" "O" "O" 8 9 10 11 12 13 14 15 16]) true))
+      (is (= (winner? ["X" "O" "O" "O" "O" "O" "X" "X" "O" "X" "O" "X" "O" "X" "O" "X"]) false)))
     (testing "Lines"
-      (is (= (winner? [\X \O \X \X \O 6 \X 8 9]) true))
+      (is (= (winner? ["X" "O" "X" "X" "O" 6 "X" 8 9]) true))
       ; TODO
       )
     (testing "Diagonals"
-      (is (= (winner? [\X \O \X \O \X 6 \O 8 \X]) true))
+      (is (= (winner? ["X" "O" "X" "O" "X" 6 "O" 8 "X"]) true))
       ; TODO
       )))

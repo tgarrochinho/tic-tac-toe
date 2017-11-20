@@ -8,7 +8,7 @@
   ([] (make-board board-default-size))
   ([board-size] (vec (range 1 (+ 1 (* board-size board-size))))))
 
-(defn- board-size [board]
+(defn board-size [board]
   (math/sqrt (count board)))
 
 (defn board-lines [board]
@@ -47,11 +47,12 @@
           (board-columns board)
           (board-diagonals board)))
 
-(defn board-picker [board number mark]
+(defn board-pick [board number mark]
   (assoc board (dec number) mark))
 
 (defn valid-pick? [board number]
-  (number? (board (dec number))))
+  (try (number? (board (dec number)))
+       (catch IndexOutOfBoundsException e false)) )
 
 (defn board-full? [board]
   (not-any? number? board))
